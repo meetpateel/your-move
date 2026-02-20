@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valentine Protocol 💘</title>
+  <title>Choice Is Yours ✨</title>
   <style>
     :root{
       --bg1:#0b0b14;
@@ -26,9 +26,9 @@
       place-items:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(255,59,122,.35), transparent 60%),
-        radial-gradient(900px 600px at 90% 40%, rgba(46,242,165,.18), transparent 55%),
-        radial-gradient(900px 700px at 60% 90%, rgba(255,179,204,.18), transparent 60%),
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,59,122,.30), transparent 60%),
+        radial-gradient(900px 600px at 90% 40%, rgba(46,242,165,.16), transparent 55%),
+        radial-gradient(900px 700px at 60% 90%, rgba(255,179,204,.16), transparent 60%),
         linear-gradient(160deg, var(--bg1), var(--bg2));
       color: var(--text);
       overflow:hidden;
@@ -41,7 +41,7 @@
       mix-blend-mode:overlay;
     }
     .wrap{
-      width:min(860px, calc(100vw - 32px));
+      width:min(900px, calc(100vw - 32px));
       display:grid;
       gap:16px;
       grid-template-columns: 1.15fr .85fr;
@@ -125,38 +125,22 @@
       font-size: 16px;
       cursor:pointer;
       color:white;
-      transition: transform .08s ease, filter .15s ease;
+      transition: transform .08s ease, filter .15s ease, background .2s ease;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
     }
     button:active{ transform: translateY(1px) scale(.99); }
     .yes{
       background: linear-gradient(135deg, var(--hot), #ff6aa0);
-      box-shadow: 0 14px 40px rgba(255,59,122,.25);
-      transition: transform .3s ease, filter .15s ease, font-size .3s ease;
+      box-shadow: 0 14px 40px rgba(255,59,122,.22);
     }
     .yes:hover{ filter: brightness(1.05); }
-    .no{
+    .later{
       background: rgba(255,255,255,.10);
       border:1px solid rgba(255,255,255,.18);
       color: rgba(255,255,255,.90);
-      transition: transform .08s ease, filter .15s ease, background .3s ease;
     }
-    .no:hover{ filter: brightness(1.1); }
-    
-    @keyframes shake{
-      0%, 100%{ transform: translateX(0); }
-      25%{ transform: translateX(-8px) rotate(-5deg); }
-      75%{ transform: translateX(8px) rotate(5deg); }
-    }
-    
-    @keyframes shrinkGrow{
-      0%, 100%{ transform: scale(1); }
-      50%{ transform: scale(0.85); }
-    }
-    
-    .no.shaking{ animation: shake 0.4s ease; }
-    .no.shrinking{ animation: shrinkGrow 0.5s ease; }
+    .later:hover{ filter: brightness(1.08); }
 
     .sideTitle{
       font-size: 14px;
@@ -193,12 +177,12 @@
       font-size: 13px;
       cursor:pointer;
       user-select:none;
-      transition: transform .08s ease, background .15s ease;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
     }
     .pill:active{ transform: scale(.99); }
     .pill.active{
-      background: rgba(255,59,122,.22);
-      border-color: rgba(255,59,122,.35);
+      background: rgba(255,59,122,.18);
+      border-color: rgba(255,59,122,.32);
     }
 
     .receipt{
@@ -222,7 +206,7 @@
       position:fixed; inset:0; pointer-events:none; z-index:60;
     }
 
-    /* Love letter modal */
+    /* Modal */
     .modal{
       position:fixed; inset:0;
       background: rgba(0,0,0,.55);
@@ -232,7 +216,7 @@
       padding:18px;
     }
     .modal .sheet{
-      width:min(520px, calc(100vw - 28px));
+      width:min(560px, calc(100vw - 28px));
       background: rgba(255,255,255,.10);
       border:1px solid rgba(255,255,255,.18);
       border-radius: 24px;
@@ -253,6 +237,12 @@
       font-weight:900;
       cursor:pointer;
     }
+    .rowBtns{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
   </style>
 </head>
 <body>
@@ -261,49 +251,60 @@
 
   <div class="wrap">
     <div class="card" id="mainCard">
-      <div class="badge"><span class="pulse"></span> CELL SIGNALING PROTOCOL</div>
+      <div class="badge"><span class="pulse"></span> CHOICE IS YOURS</div>
 
       <h1>
         <span id="type" class="type"></span><span class="caret">▍</span>
       </h1>
 
       <p class="sub" id="subtitle">
-        I've been wanting to ask you this for a while now… 🫶
+        No pressure. Just pick what feels easy. 🙂
       </p>
 
       <div class="btnRow">
-        <button class="yes" id="yesBtn">YES ✅</button>
-        <button class="no" id="noBtn">No 🙃</button>
+        <button class="yes" id="yesBtn">I’m in 😌</button>
+        <button class="later" id="laterBtn">Later / not yet 🙂</button>
       </div>
 
       <div class="receipt" id="receipt"></div>
     </div>
 
     <div class="card">
-      <div class="sideTitle">If you say yes…</div>
+      <div class="sideTitle">Build your plan</div>
       <div class="panel">
         <div class="mini">
           <b>Pick the vibe</b>
           <div class="pillRow" id="vibes">
-            <div class="pill active" data-v="Dinner somewhere nice 🍰">Dinner somewhere nice 🍰</div>
-            <div class="pill" data-v="Coffee & walk ☕️">Coffee & walk ☕️</div>
-            <div class="pill" data-v="Movie + snacks 🎬">Movie + snacks 🎬</div>
+            <div class="pill active" data-v="Coffee & walk ☕️🚶‍♀️">Coffee & walk ☕️🚶‍♀️</div>
+            <div class="pill" data-v="Dinner somewhere nice 🍰">Dinner somewhere nice 🍰</div>
+            <div class="pill" data-v="15-min call + laugh 😂">15-min call + laugh 😂</div>
             <div class="pill" data-v="Surprise me 🚗">Surprise me 🚗</div>
           </div>
         </div>
 
         <div class="mini">
-          <b>Pick the time</b>
+          <b>Pick the timing</b>
           <div class="pillRow" id="times">
-            <div class="pill active" data-t="This weekend ✨">This weekend ✨</div>
-            <div class="pill" data-t="Whenever works 😌">Whenever works 😌</div>
-            <div class="pill" data-t="Valentine's Day 💘">Valentine's Day 💘</div>
+            <div class="pill active" data-t="After your exam ✅">After your exam ✅</div>
+            <div class="pill" data-t="March check-in 📅">March check-in 📅</div>
+            <div class="pill" data-t="May meetup ✈️">May meetup ✈️</div>
+          </div>
+        </div>
+
+        <div class="mini">
+          <b>How should it feel?</b>
+          <div class="pillRow" id="pace">
+            <div class="pill active" data-p="Keep it chill 🌿">Keep it chill 🌿</div>
+            <div class="pill" data-p="Intentional & steady 🎯">Intentional & steady 🎯</div>
+          </div>
+          <div style="margin-top:10px; color:var(--muted); font-size:13px; line-height:1.45;">
+            Your comfort > everything. You choose the pace.
           </div>
         </div>
 
         <div class="mini">
           <b>Bonus perk</b><br/>
-          Saying "Yes" grants: <span style="color:var(--ok); font-weight:900;">Unregulated dopamine signaling</span> (side effect: can't stop smiling).
+          Selecting anything grants: <span style="color:var(--ok); font-weight:900;">stress-free good vibes</span> ✨
         </div>
       </div>
     </div>
@@ -314,26 +315,22 @@
   <div class="modal" id="modal">
     <div class="sheet">
       <button class="x" id="close">✕</button>
-      <div class="badge" style="margin-bottom:10px;"><span class="pulse"></span> POSITIVE RESULTS</div>
-      <h2>Okay… I'm smiling like an idiot 💖</h2>
-      <p id="letter">
-        I'm so happy you said yes. Honestly wasn't sure if you'd feel the same way, 
-        but I'm really glad you do. You're like the wildtype to my mutation—you just make everything right. 
-        Pick whatever sounds fun and I'll make it happen. Can't wait. 😊
-      </p>
-      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="yes" id="copyBtn">Copy confirmation</button>
-        <button class="no" id="againBtn">Replay animation</button>
+      <div class="badge" style="margin-bottom:10px;"><span class="pulse"></span> CONFIRMED</div>
+      <h2 id="modalTitle">Locked in 😌</h2>
+      <p id="letter"></p>
+      <div class="rowBtns">
+        <button class="yes" id="copyBtn">Copy summary</button>
+        <button class="later" id="againBtn">Replay ✨</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ---------- Typewriter ----------
+    // ---------- Typewriter (lighter + May-appropriate) ----------
     const lines = [
-      "Will you be my valentine? 💘",
-      "This took more courage than p53 fighting mutations… 😊",
-      "My feelings are proliferating uncontrollably ✨"
+      "Quick question… 🙂",
+      "Pick what feels easy ✨",
+      "No pressure. Your call 😌"
     ];
     const typeEl = document.getElementById("type");
     const subtitle = document.getElementById("subtitle");
@@ -343,9 +340,7 @@
       const current = lines[li];
       if(!deleting){
         typeEl.textContent = current.slice(0, ci++);
-        if(ci > current.length + 18){
-          deleting = true;
-        }
+        if(ci > current.length + 18) deleting = true;
       }else{
         typeEl.textContent = current.slice(0, ci--);
         if(ci <= 0){
@@ -358,8 +353,8 @@
     }
     typeLoop();
 
-    // ---------- Vibe/time selection ----------
-    function setupPills(containerId, cls){
+    // ---------- Pill selection ----------
+    function setupPills(containerId){
       const box = document.getElementById(containerId);
       box.addEventListener("click", (e) => {
         const pill = e.target.closest(".pill");
@@ -370,6 +365,7 @@
     }
     setupPills("vibes");
     setupPills("times");
+    setupPills("pace");
 
     function getActiveText(containerId, attr){
       const box = document.getElementById(containerId);
@@ -377,126 +373,18 @@
       return active?.getAttribute(attr) || "";
     }
 
-    // ---------- No button fun stuff ----------
-    const noBtn = document.getElementById("noBtn");
+    // ---------- Buttons ----------
+    const laterBtn = document.getElementById("laterBtn");
     const yesBtn = document.getElementById("yesBtn");
     const receipt = document.getElementById("receipt");
-
-    const noPhrases = [
-      "No 🙃",
-      "Wait, really? 🤔",
-      "Give me another chance? 💭",
-      "Come onnn 😊",
-      "I promise it'll be fun! 🥺",
-      "Pretty please? 🥹",
-      "You're killing me here 💔",
-      "Okay but hear me out… 😅",
-      "Just click YES, trust me 😌"
-    ];
-    
-    const noColors = [
-      "rgba(255,255,255,.10)",
-      "rgba(255,100,100,.15)",
-      "rgba(255,150,50,.15)",
-      "rgba(150,100,255,.15)",
-      "rgba(100,150,255,.15)"
-    ];
-    
-    let noClickCount = 0;
-    let yesFontSize = 16;
-
-    noBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      noClickCount++;
-      
-      // Shake the No button
-      noBtn.classList.add("shaking");
-      setTimeout(() => noBtn.classList.remove("shaking"), 400);
-      
-      // Change No button text
-      const phraseIndex = Math.min(noClickCount - 1, noPhrases.length - 1);
-      noBtn.textContent = noPhrases[phraseIndex];
-      
-      // Change No button color randomly
-      const colorIndex = Math.floor(Math.random() * noColors.length);
-      noBtn.style.background = noColors[colorIndex];
-      
-      // Grow the Yes button progressively
-      yesFontSize += 3;
-      yesBtn.style.fontSize = yesFontSize + "px";
-      yesBtn.style.transform = `scale(${1 + (noClickCount * 0.08)})`;
-      
-      // Add shrinking animation to No button
-      noBtn.classList.add("shrinking");
-      setTimeout(() => noBtn.classList.remove("shrinking"), 500);
-      
-      // Spawn hearts around the No button
-      sparkleHearts(5);
-      
-      // Show increasingly desperate subtitle messages
-      const messages = [
-        "I've been wanting to ask you this for a while now… 🫶",
-        "The No button looks apoptotic… maybe try the other one? 💘",
-        "My feelings have metastasized straight to my heart ✨",
-        "The Yes button is growing like benign cells (in a good way) 💖",
-        "Unlike cancer cells, I have healthy boundaries… but I really like you 🎯",
-        "This isn't chemotherapy—no pressure, but… say yes? 😌",
-        "You're the CRISPR to my genome… you just make everything better ⭐",
-        "Let's be each other's targeted therapy 💕"
-      ];
-      
-      if(noClickCount <= messages.length) {
-        subtitle.textContent = messages[Math.min(noClickCount, messages.length - 1)];
-      }
-      
-      // After many clicks, make No button almost disappear
-      if(noClickCount >= 7) {
-        noBtn.style.opacity = Math.max(0.3, 1 - (noClickCount - 6) * 0.15);
-        noBtn.style.transform = `scale(${Math.max(0.6, 1 - (noClickCount - 6) * 0.08)})`;
-      }
-    });
-    
-    // Hover effect - make Yes button pulse
-    noBtn.addEventListener("mouseenter", () => {
-      yesBtn.style.filter = "brightness(1.15) drop-shadow(0 0 20px rgba(255,59,122,.6))";
-    });
-    
-    noBtn.addEventListener("mouseleave", () => {
-      yesBtn.style.filter = "";
-    });
-
-    // ---------- YES behavior ----------
-    yesBtn.addEventListener("click", () => {
-      const vibe = getActiveText("vibes","data-v");
-      const time = getActiveText("times","data-t");
-
-      subtitle.textContent = "Access granted. Valentine protocol accepted. ✅";
-
-      receipt.style.display = "block";
-      receipt.textContent =
-`— VALENTINE CONFIRMATION RECEIPT —
-Status: APPROVED ✅
-Vibe:   ${vibe}
-Time:   ${time}
-
-Perk:   Unregulated dopamine signaling
-Note:   You're the cure I've been researching 💖`;
-
-      // Disable the No button
-      noBtn.disabled = true;
-      noBtn.style.opacity = "0.3";
-      noBtn.style.cursor = "not-allowed";
-      noBtn.textContent = "Too late! 😊";
-
-      blastConfetti();
-      openModal();
-    });
 
     // ---------- Modal ----------
     const modal = document.getElementById("modal");
     const close = document.getElementById("close");
     const againBtn = document.getElementById("againBtn");
     const copyBtn = document.getElementById("copyBtn");
+    const modalTitle = document.getElementById("modalTitle");
+    const letter = document.getElementById("letter");
 
     function openModal(){ modal.style.display = "grid"; }
     function closeModal(){ modal.style.display = "none"; }
@@ -506,17 +394,54 @@ Note:   You're the cure I've been researching 💖`;
 
     againBtn.addEventListener("click", () => {
       blastConfetti();
-      sparkleHearts(18);
+      sparkleHearts(14);
+    });
+
+    function buildSummary(status){
+      const vibe = getActiveText("vibes","data-v");
+      const time = getActiveText("times","data-t");
+      const pace = getActiveText("pace","data-p");
+
+      return `— PLAN SUMMARY —
+Status: ${status}
+Vibe:   ${vibe}
+When:   ${time}
+Pace:   ${pace}
+
+Note:   Your comfort > everything. 🙂`;
+    }
+
+    function showReceipt(status){
+      receipt.style.display = "block";
+      receipt.textContent = buildSummary(status);
+    }
+
+    yesBtn.addEventListener("click", () => {
+      subtitle.textContent = "Locked in. Simple. 😌";
+      showReceipt("I’m in ✅");
+      blastConfetti();
+      modalTitle.textContent = "Locked in 😌";
+      letter.textContent = "Cool. No pressure energy. We’ll keep it easy and make it fun.";
+      openModal();
+    });
+
+    laterBtn.addEventListener("click", () => {
+      subtitle.textContent = "Respect. We’ll keep it chill. 🌿";
+      showReceipt("Later / not yet 🙂");
+      sparkleHearts(10);
+      modalTitle.textContent = "All good 🙂";
+      letter.textContent = "No rush at all. Pick a vibe/timing whenever you feel like it.";
+      openModal();
     });
 
     copyBtn.addEventListener("click", async () => {
       try{
-        await navigator.clipboard.writeText(receipt.textContent);
+        await navigator.clipboard.writeText(receipt.textContent || buildSummary("—"));
         copyBtn.textContent = "Copied ✅";
-        setTimeout(()=> copyBtn.textContent="Copy confirmation", 1100);
+        setTimeout(()=> copyBtn.textContent="Copy summary", 1100);
       }catch{
         copyBtn.textContent = "Copy failed";
-        setTimeout(()=> copyBtn.textContent="Copy confirmation", 1100);
+        setTimeout(()=> copyBtn.textContent="Copy summary", 1100);
       }
     });
 
@@ -543,7 +468,7 @@ Note:   You're the cure I've been researching 💖`;
         s: 10 + Math.random()*18,
         vy: 0.8 + Math.random()*2.2,
         vx: -0.35 + Math.random()*0.7,
-        a: 0.35 + Math.random()*0.55,
+        a: 0.30 + Math.random()*0.55,
         r: Math.random()*Math.PI,
         spin: (-0.012 + Math.random()*0.024)
       };
@@ -571,9 +496,7 @@ Note:   You're the cure I've been researching 💖`;
         h.x += h.vx;
         h.y -= h.vy;
         h.r += h.spin;
-
         drawHeart(h.x,h.y,h.s,h.r,h.a);
-
         if(h.y < -60 || h.x < -60 || h.x > W+60){
           Object.assign(h, makeHeart());
         }
@@ -585,25 +508,25 @@ Note:   You're the cure I've been researching 💖`;
     function sparkleHearts(n=12){
       for(let i=0;i<n;i++){
         hearts.push({
-          x: W*0.5 + (Math.random()-0.5)*180,
-          y: H*0.55 + (Math.random()-0.5)*120,
-          s: 16 + Math.random()*22,
-          vy: 1.6 + Math.random()*2.4,
+          x: W*0.5 + (Math.random()-0.5)*220,
+          y: H*0.55 + (Math.random()-0.5)*140,
+          s: 14 + Math.random()*22,
+          vy: 1.4 + Math.random()*2.2,
           vx: -1.1 + Math.random()*2.2,
-          a: 0.75 + Math.random()*0.25,
+          a: 0.65 + Math.random()*0.25,
           r: Math.random()*Math.PI,
           spin:(-0.03 + Math.random()*0.06)
         });
       }
-      // keep it bounded
       if(hearts.length > 90) hearts.splice(0, hearts.length-90);
     }
 
-    // ---------- Confetti ----------
+    // ---------- Confetti (unchanged) ----------
     const conf = document.getElementById("confetti");
     const cctx = conf.getContext("2d");
     let confetti = [];
     let cW=0,cH=0,cDPR=1;
+
     function resizeConf(){
       cDPR = devicePixelRatio || 1;
       cW = window.innerWidth; cH = window.innerHeight;
@@ -615,8 +538,7 @@ Note:   You're the cure I've been researching 💖`;
     resizeConf();
 
     function blastConfetti(){
-      // no custom colors specified—just random HSL
-      const count = 160;
+      const count = 150;
       for(let i=0;i<count;i++){
         confetti.push({
           x: cW/2,
@@ -631,7 +553,7 @@ Note:   You're the cure I've been researching 💖`;
           hue: Math.random()*360
         });
       }
-      sparkleHearts(22);
+      sparkleHearts(18);
       confLoop();
     }
 
